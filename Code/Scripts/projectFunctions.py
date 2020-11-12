@@ -9,6 +9,7 @@ import os
 import time
 import pandas as pd
 import numpy  as np
+from scipy import stats
 #import nltk
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
@@ -17,10 +18,13 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import MultinomialNB
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.decomposition import PCA
+from sklearn import mixture
 
 from sklearn.metrics import make_scorer
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import fbeta_score
+from sklearn import metrics
 
 from matplotlib import pyplot as plt
 import seaborn as sns; sns.set()
@@ -271,6 +275,54 @@ def randomForest(X_train, X_test, y_train, y_test):
         results['acc_test']  = accuracy_score(y_test, clf_predict_test)
          
         return results,clf_fit_train, 
+    except Exception as ex:
+           print ("-----------------------------------------------------------------------")
+           template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+           message = template.format(type(ex).__name__, ex.args)
+           print (message)
+           
+def pca(features,dim):
+    try:
+        #logic
+        pca = PCA(n_components=dim)
+        pca.fit(features)
+        reduced_dim = pca.transform(features)
+        
+#        from pics import pca_results
+#        _ = pca_results(features, pca)
+        
+        dlist = [];
+        for i in range(dim):
+            s = "D" + str(i)
+            dlist.append(s)
+        pca_comp = pd.DataFrame(pca.components_,columns=features.columns,index = dlist)
+        pca_comp.transpose().to_csv('test.csv')
+        return reduced_dim, pca_comp
+    
+    except Exception as ex:
+           print ("-----------------------------------------------------------------------")
+           template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+           message = template.format(type(ex).__name__, ex.args)
+           print (message)
+           
+def gclus(reduced_data,ic):
+    try:
+        cluster =  mixture.GaussianMixture(covariance_type='spherical', init_params='kmeans',
+        max_iter=100, means_init=None, n_components=ic, n_init=1,
+        precisions_init=None, random_state=None, reg_covar=1e-06,
+        tol=0.001, verbose=0, verbose_interval=10, warm_start=False,
+        weights_init=None).fit(reduced_data)
+        
+        pred = cluster.predict(reduced_data)
+        
+        centers = np.empty(shape=(cluster.n_components, reduced_data.shape[1]))
+        for i in range(cluster.n_components):
+            density = stats.multivariate_normal(cov=cluster.covariances_[i], mean=cluster.means_[i]).logpdf(reduced_data)
+            centers[i, :] = reduced_data[np.argmax(density)]
+        score = metrics.silhouette_score(reduced_data, pred, metric='euclidean')
+        
+        return cluster, centers,score
+        
     except Exception as ex:
            print ("-----------------------------------------------------------------------")
            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
