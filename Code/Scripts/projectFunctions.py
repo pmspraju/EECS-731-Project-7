@@ -296,8 +296,8 @@ def pca(features,dim):
             s = "D" + str(i)
             dlist.append(s)
         pca_comp = pd.DataFrame(pca.components_,columns=features.columns,index = dlist)
-        pca_comp.transpose().to_csv('test.csv')
-        return reduced_dim, pca_comp
+        #pca_comp.transpose().to_csv('test.csv')
+        return reduced_dim, pca_comp.transpose(), pca
     
     except Exception as ex:
            print ("-----------------------------------------------------------------------")

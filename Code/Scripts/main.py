@@ -65,23 +65,30 @@ from projectFunctions import multinomialnb, svmClassifier, randomForest, pca, gc
 #print ("Accuracy for Training, Test sets: %.5f, %.5f" %(results['acc_train'], results['acc_test']))     
 #print ("-----------------------------------------------------------------------")
 
-dim = 6
-reduced_f, pca_comp = pca(features,dim)
-clus_df = pd.DataFrame(columns=['clusters','score'])
-clist = [30]; slist = [];
-for dim in clist:
-    cluster, centers, score = gclus(reduced_f,dim)
-    slist.append(score * 100)
-    print ("-----------------------------------------------------------------------")
-    print "silhouette score for GMM: {:.4f}".format(score)
-    print "Optimal number of components: {:.4f}".format(cluster.n_components)
-    print "number of centers: {:.4f}".format(len(centers))
-    print ("-----------------------------------------------------------------------")
-
-clus_df['clusters'] = clist
-clus_df['score'] = slist
-
-ax = sns.barplot(x="clusters", y="score", data=clus_df)
-ax.set_title('Clustering scores')
+dim = 2
+reduced_f, pca_comp, pca = pca(features,dim)
+from pics import pcadim, biplot
+#pcad = pca_comp['D0']
+#pcad = pca_comp.iloc[:,0]
+#pcadim(pcad)
+# Create a DataFrame for the reduced data
+reduced_f = pd.DataFrame(reduced_f, columns = ['Dimension 1', 'Dimension 2'])
+biplot(features, reduced_f, pca)
+#clus_df = pd.DataFrame(columns=['clusters','score'])
+#clist = [30]; slist = [];
+#for dim in clist:
+#    cluster, centers, score = gclus(reduced_f,dim)
+#    slist.append(score * 100)
+#    print ("-----------------------------------------------------------------------")
+#    print "silhouette score for GMM: {:.4f}".format(score)
+#    print "Optimal number of components: {:.4f}".format(cluster.n_components)
+#    print "number of centers: {:.4f}".format(len(centers))
+#    print ("-----------------------------------------------------------------------")
+#
+#clus_df['clusters'] = clist
+#clus_df['score'] = slist
+#
+#ax = sns.barplot(x="clusters", y="score", data=clus_df)
+#ax.set_title('Clustering scores')
 
 #data.to_csv('test.csv',index=False)
