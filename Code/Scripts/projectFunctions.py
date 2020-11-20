@@ -104,9 +104,9 @@ def transformData(df):
             if df[i].min() < 0:
                 nc.append(i)
          
-        target = df[' shares']
+        target = df['shares']
         features_transform = pd.DataFrame(data = df)
-        features_transform = features_transform.drop(columns=[' shares'], axis=1)
+        features_transform = features_transform.drop(columns=['shares'], axis=1)
         
         #Add constant value to make the negative values as positive.
         for i in nc:
@@ -323,6 +323,70 @@ def gclus(reduced_data,ic):
         
         return cluster, centers,score
         
+    except Exception as ex:
+           print ("-----------------------------------------------------------------------")
+           template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+           message = template.format(type(ex).__name__, ex.args)
+           print (message)
+           
+def getCounts(flist,dat):
+    try:
+        #logic
+        cols = []; counts = []; fake = [];
+        for f in flist:
+            ind = []
+            ind = np.where((dat[f] == 1) & (dat['shares'] == 1))[0].tolist()
+            #df1 = dat.loc[ind,['data_channel_is_lifestyle','shares']]
+            cols.append(f)
+            counts.append(len(ind))
+            fake.append(False)
+        
+        for f in flist:
+            ind = []
+            ind = np.where((dat[f] == 1) & (dat['shares'] == 0))[0].tolist()
+            #df1 = dat.loc[ind,['data_channel_is_lifestyle','shares']]
+            cols.append(f)
+            counts.append(len(ind))
+            fake.append(True)
+            
+        df = pd.DataFrame(columns = ['feature','count','fake'])
+        df['feature'] = cols
+        df['count']= counts
+        df['fake'] = fake 
+        
+        return df
+    except Exception as ex:
+           print ("-----------------------------------------------------------------------")
+           template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+           message = template.format(type(ex).__name__, ex.args)
+           print (message)
+
+def get2Counts(flist,dat):
+    try:
+        #logic
+        cols = []; counts = []; fake = [];
+        for f in flist:
+            ind = []
+            ind = np.where((dat[f] != ' ') & (dat['shares'] == 1))[0].tolist()
+            #df1 = dat.loc[ind,['data_channel_is_lifestyle','shares']]
+            cols.append(f)
+            counts.append(len(ind))
+            fake.append(False)
+        
+        for f in flist:
+            ind = []
+            ind = np.where((dat[f] != ' ') & (dat['shares'] == 0))[0].tolist()
+            #df1 = dat.loc[ind,['data_channel_is_lifestyle','shares']]
+            cols.append(f)
+            counts.append(len(ind))
+            fake.append(True)
+            
+        df = pd.DataFrame(columns = ['feature','count','fake'])
+        df['feature'] = cols
+        df['count']= counts
+        df['fake'] = fake 
+        
+        return df
     except Exception as ex:
            print ("-----------------------------------------------------------------------")
            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
