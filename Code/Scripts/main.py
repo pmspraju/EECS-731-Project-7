@@ -78,6 +78,8 @@ for fl in range(len(flist)):
         plt.xticks(rotation=90)
 plt.suptitle("Feature distribution")
 plt.show()
+
+sns.lineplot(data=dat, x="year", y="passengers", hue="month")
 ###
 
 data_raw = data
