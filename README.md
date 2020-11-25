@@ -72,5 +72,16 @@ Attributes:
 59. abstitlesentiment_polarity: Absolute polarity level
 60. shares: Number of shares (target)
 
+## Classification
+1. Multinomial Naive Bayes classifier
+2. Support Vector Machine Classifier
+3. Random Forest Classifier
+
+## Dimensionality reduction
+1. Principal component analysis
+
+## Clustering
+1. Gaussian mixture Clustering 
+
 ## References:
 1. https://www.kaggle.com/thehapyone/uci-online-news-popularity-data-set
