@@ -6,7 +6,7 @@ The articles were published by Mashable (www.mashable.com) and their content as 
 Acquisition date: January 8, 2015
 The estimated relative performance values were estimated by the authors using a Random Forest classifier and rolling windows as assessment method.. See their article for more details on how the relative performance values were set.
 
-##Attribute Information:
+## Attribute Information:
 Number of Attributes: 61 (58 predictive attributes, 2 non-predictive, 1 goal field)
 
 Attributes:
